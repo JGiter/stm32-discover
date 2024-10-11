@@ -17,12 +17,15 @@ uint32_t *vector_table[16 + 84] __attribute__ ((section (".isr_vector"))) = {
   (uint32_t *)_reset
 };
 
+volatile uint32_t globalVar = 0x3f;
+
 __attribute__ ((noreturn)) int
 _reset (void)
 {
-  RCC->AHBENR |= RCC_AHBENR_GPIOAEN;
-  GPIOA->MODER |= (0x01 << GPIO_MODER_MODER5_Pos); // output mode
-  GPIOA->OTYPER &= ~GPIO_OTYPER_OT_5;              // push-pull
+  // uint32_t localVar = 0xf4;
+  // RCC->AHBENR |= RCC_AHBENR_GPIOAEN;
+  // GPIOA->MODER |= (0x01 << GPIO_MODER_MODER5_Pos); // output mode
+  // GPIOA->OTYPER &= ~GPIO_OTYPER_OT_5;              // push-pull
 
   // __HAL_RCC_GPIOA_CLK_ENABLE ();
   // GPIO_TypeDef GPIOA_Def;
@@ -33,19 +36,21 @@ _reset (void)
   // GPIOA_InitDef.Mode = GPIO_MODE_OUTPUT_PP;
   // HAL_GPIO_Init (GPIOA, &GPIOA_InitDef);
 
-  while (1)
+  while (globalVar)
     {
       // HAL_GPIO_TogglePin (GPIOA, GPIO_PIN_5);
       // HAL_Delay (2000);
       // HAL_GPIO_TogglePin (GPIOA, GPIO_PIN_5);
-      uint32_t SHORT_DELAY = (1 << 20);
-      uint32_t LONG_DELAY = (SHORT_DELAY << 2);
+      // uint32_t SHORT_DELAY = (1 << 20);
+      // uint32_t LONG_DELAY = (SHORT_DELAY << 2);
 
-      GPIOA->ODR |= GPIO_PIN_5;
-      delay (SHORT_DELAY);
-      GPIOA->ODR ^= GPIO_PIN_5;
-      delay (LONG_DELAY);
+      // GPIOA->ODR |= GPIO_PIN_5;
+      // delay (SHORT_DELAY);
+      // GPIOA->ODR ^= GPIO_PIN_5;
+      // delay (LONG_DELAY);
     }
+  while (1)
+    ;
 }
 
 void
